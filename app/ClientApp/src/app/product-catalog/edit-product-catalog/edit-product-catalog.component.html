@@ -1,0 +1,21 @@
+<mat-card>
+  <mat-card-content>
+    <div class="row">
+      <div class="col">
+        <form [formGroup]="productForm" novalidate>
+            <mat-form-field>
+                <input matInput placeholder="Name" formControlName="name" autocomplete="off">
+              </mat-form-field>
+
+              <mat-form-field>
+                <textarea matInput placeholder="Description" rows="5" formControlName="description" autocomplete="off"></textarea>
+              </mat-form-field>
+        </form>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button type="button" mat-raised-button color="primary" (click)="save()">Save</button>
+    <button type="button" mat-raised-button color="secondary" [routerLink]="['/products']">Cancel</button>
+  </mat-card-actions>
+</mat-card>

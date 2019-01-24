@@ -1,0 +1,135 @@
+version: '3.2'
+
+services: 
+ proxy:
+  build:
+   context: ./proxy
+  ports:
+   - 8080:8080
+  restart: on-failure
+  depends_on:
+   - app
+   - gateway
+  networks:
+   - bridge_network
+ app:
+  build:
+   context: ./app
+  networks:
+   - bridge_network
+ gateway:
+  build:
+   context: ./gateway
+  networks:
+   - bridge_network
+ orders-api:
+  build:
+   context: ./orders
+  environment:
+    ConnectionStrings__default: mongodb://orders-database:27017
+  depends_on:
+   - product-catalog-database
+  restart: on-failure
+  networks:
+   - bridge_network
+ orders-database:
+  image: mongo
+  volumes: 
+   - mongodata:/data/db
+  networks:
+   - bridge_network
+ product-catalog-api:
+  build:
+   context: ./product-catalog
+  environment:
+    ConnectionStrings__default: Server=product-catalog-database;Initial Catalog=product_catalog;User=sa;Password=Your_password123;
+  depends_on:
+   - product-catalog-database
+  restart: on-failure
+  networks:
+   - bridge_network
+ product-catalog-database:
+  image: mcr.microsoft.com/mssql/server
+  environment:
+   SA_PASSWORD: "Your_password123"
+   ACCEPT_EULA: "Y"
+  volumes:
+    - sqldata:/var/opt/mssql
+  networks:
+   - bridge_network
+ prometheus:
+  build: 
+    context: ./prometheus
+  depends_on:
+   - cadvisor
+   - node-exporter
+  command: 
+   - '--config.file=/etc/prometheus/prometheus.yml'
+   - '--web.external-url=http://localhost:8080'
+   - '--web.route-prefix=/'
+  volumes:
+   - prometheus:/prometheus
+  networks:
+   - bridge_network
+ alertmanager:
+  build: 
+   context: ./alertmanager
+  command:
+   - '--web.external-url=http://localhost:8080'
+  volumes:
+   - alertmanager:/alertmanager
+  networks:
+   - bridge_network
+ grafana:
+  build: 
+   context: ./grafana
+  depends_on:
+   - prometheus
+  environment:
+   - GF_SERVER_ROOT_URL=http://localhost:8080/grafana-dashboard/
+  volumes:
+   - grafana:/var/lib/grafana
+  networks:
+   - bridge_network
+ cadvisor:
+  image: google/cadvisor
+  ports:
+   - 8090:8080
+  volumes:
+   - /c/Users/:/rootfs:ro
+   - /var/run:/var/run:rw
+   - /sys:/sys:ro
+   - /var/lib/docker/:/var/lib/docker:ro
+  networks:
+   - bridge_network
+ node-exporter:
+  image: prom/node-exporter
+  volumes:
+   - /proc:/host/proc:ro
+   - /sys:/host/sys:ro
+   - /c/Users:/rootfs:ro
+  command: 
+   - '--path.procfs=/host/proc' 
+   - '--path.sysfs=/host/sys'
+   - --collector.filesystem.ignored-mount-points
+   - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+  networks:
+   - bridge_network
+ sql-server-exporter:
+  image: awaragi/prometheus-mssql-exporter
+  environment:
+   - SERVER=product-catalog-database
+   - USERNAME=sa
+   - PASSWORD=Your_password123
+  networks:
+   - bridge_network
+
+networks:
+  bridge_network:
+    driver: "bridge"    
+volumes:
+  sqldata:
+  mongodata:
+  prometheus:
+  alertmanager:
+  grafana:

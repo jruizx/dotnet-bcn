@@ -1,0 +1,26 @@
+<mat-card>
+  <mat-card-content>
+    <div class="row">
+      <div class="col">
+        <form [formGroup]="orderForm" novalidate>
+          <mat-form-field>
+            <input type="text" matInput placeholder="Product" formControlName="product" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
+              <mat-option *ngFor="let product of filteredProducts | async" [value]="product">
+                {{ product.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input type="number" matInput placeholder="Amount" formControlName="amount" autocomplete="off">
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button type="button" mat-raised-button color="primary" (click)="save()">Add</button>
+    <button type="button" mat-raised-button color="secondary" [routerLink]="['/orders']">Cancel</button>
+  </mat-card-actions>
+</mat-card>
