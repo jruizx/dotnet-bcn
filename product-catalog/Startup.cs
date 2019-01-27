@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Prometheus;
 
 namespace product_catalog
 {
@@ -54,6 +55,9 @@ namespace product_catalog
             {
                 app.UseHsts();
             }
+
+            app.UseMetricServer();
+            app.UseCollectPrometheusMetrics();
 
             app.UseHttpsRedirection();
             app.UseMvc();

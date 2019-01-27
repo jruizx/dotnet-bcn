@@ -39,30 +39,6 @@ scrape_configs:
 
     static_configs: 
      - targets: ['node-exporter:9100']
-  
-#   - job_name: 'allens'
-
-#     scrape_interval: 5s
-
-#     # Override the global default and scrape targets from this job every 5 seconds.
-#     static_configs: 
-#      - targets: ['app:5000']
-  
-#   - job_name: 'elasticsearch'
-
-#     scrape_interval: 5s
- 
-#     # Override the global default and scrape targets from this job every 5 seconds.
-#     static_configs: 
-#      - targets: ['elasticsearch_exporter:9108']
-  
-#   - job_name: 'rabbitmq'
-
-#     scrape_interval: 5s
- 
-#     # Override the global default and scrape targets from this job every 5 seconds.
-#     static_configs: 
-#      - targets: ['rabbitmq_exporter:9419']
 
   - job_name: 'mssql'
 
@@ -71,7 +47,6 @@ scrape_configs:
     # Override the global default and scrape targets from this job every 5 seconds.
     static_configs: 
      - targets: ['sql-server-exporter:4000']
-
 
 alerting:
   alertmanagers:

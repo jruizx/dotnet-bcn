@@ -1,20 +1,6 @@
 groups:
  - name: bcn-dotnet
    rules:
-  #  - alert: AllensDown
-  #    expr: up{job="allens"} == 0
-  #    for: 1m
-  #    labels:
-  #     severity: critical
-  #    annotations:
-  #     summary: "allens app is down"
-  #  - alert: ElasticsearchDown
-  #    expr: absent(elasticsearch_cluster_health_number_of_nodes) == 1
-  #    for: 1m
-  #    labels:
-  #     severity: critical
-  #    annotations:
-  #     summary: "elasticsearch is down"
    - alert: DatabaseDown
      expr: absent(mssql_instance_local_time) == 1
      for: 1m
@@ -22,17 +8,3 @@ groups:
       severity: critical
      annotations:
       summary: "database is down"
-  #  - alert: RabbitmqDown
-  #    expr: rabbit_up == 0
-  #    for: 1m
-  #    labels:
-  #     severity: critical
-  #    annotations:
-  #     summary: "rabbitmq is down"
-  #  - alert: DiskUsageTooHigh
-  #    expr: max((node_filesystem_size_bytes - node_filesystem_avail_bytes) / node_filesystem_size_bytes * 100)>75
-  #    for: 1m
-  #    labels:
-  #     severity: critical
-  #    annotations:
-  #     summary: "disk usage is higher than 75%"
