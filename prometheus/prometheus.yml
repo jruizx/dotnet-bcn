@@ -48,6 +48,23 @@ scrape_configs:
     static_configs: 
      - targets: ['sql-server-exporter:4000']
 
+  - job_name: 'product-catalog-api'
+
+    scrape_interval: 5s
+ 
+    # Override the global default and scrape targets from this job every 5 seconds.
+    static_configs: 
+     - targets: ['product-catalog-api:5000']
+
+  - job_name: 'orders-api'
+
+    scrape_interval: 5s
+ 
+    # Override the global default and scrape targets from this job every 5 seconds.
+    static_configs: 
+     - targets: ['orders-api:5000']
+
+
 alerting:
   alertmanagers:
     - scheme: http

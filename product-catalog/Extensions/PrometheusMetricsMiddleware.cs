@@ -20,8 +20,8 @@ namespace product_catalog
             var path = httpContext.Request.Path;
             var method = httpContext.Request.Method;
 
-            var counter = Metrics.CreateCounter("dotnet_http_requests_total", "HTTP Requests Total", labelNames: new[] { "path", "method", "status" });
-            var summary = Metrics.CreateSummary("dotnet_http_request_duration_milliseconds", "HTTP Request Duration milliseconds", labelNames: new[] { "path", "method", "status" });
+            var counter = Metrics.CreateCounter("product_catalog_http_requests_total", "HTTP Requests Total", labelNames: new[] { "path", "method", "status" });
+            var summary = Metrics.CreateSummary("product_catalog_http_request_duration_milliseconds", "HTTP Request Duration milliseconds", labelNames: new[] { "path", "method", "status" });
             var statusCode = 200;
             var stopWatch = Stopwatch.StartNew();
 
